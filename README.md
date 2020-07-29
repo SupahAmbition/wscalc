@@ -1,4 +1,4 @@
-#wscalc
+# wscalc
 
 A calculator web app that utilizes Web Sockects to enable "real time" calculations with all users.
 When a user uses this calculator, their calcualtion will be broadcasted to all other users. 
@@ -21,7 +21,8 @@ go test -v
 Here you can see when progress was made and what was done (by viewing the repo at the time of the commit). 
 I time tracked progress on this project so you can see how long I took to do things.  
 
-init  -- 
+init  -- 0:00:00 49360055c9719cee319f4f33782766e047ae3911
+
 finished -- 
 
 

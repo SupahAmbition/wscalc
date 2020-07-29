@@ -1,2 +1,3 @@
-./tylerpc.pem
-./wscalc
+tylerpc.pem
+wscalc
+*.swap

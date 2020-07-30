@@ -22,18 +22,24 @@ var wsUpgrader = websocket.Upgrader{
 
 func main() {
 
+	r := setupRouter()
+	r.Run(":8000")
+}
+
+func setupRouter() *gin.Engine {
+
 	r := gin.Default() //router
 
 	r.Use(static.Serve("/", static.LocalFile("./public/index.html", true)))
 	r.NoRoute(serveIndex)
 
-	r.GET("/", info)
+	r.GET("/info", info)
 
 	//routes start with get, and get upgraded to ws.
 	r.GET("/subscribe", subscribe)
 	r.GET("/publish", publish)
 
-	r.Run(":8000")
+	return r
 }
 
 func info(c *gin.Context) {

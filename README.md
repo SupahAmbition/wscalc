@@ -21,7 +21,8 @@ go test -v
 Here you can see when progress was made and what was done (by viewing the repo at the time of the commit). 
 I time tracked progress on this project so you can see how long I took to do things.  
 
-init  -- 0:00:00 49360055c9719cee319f4f33782766e047ae3911
+init  -- 0:00 49360055c9719cee319f4f33782766e047ae3911
+0:58 -- c2ca51f64f79b19366d8833ce28ad12378a412bf 
 
 finished -- 
 

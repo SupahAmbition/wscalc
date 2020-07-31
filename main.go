@@ -1,18 +1,14 @@
 package main
 
 import (
-	"log"
-	//"fmt"
-	"net/http"
-
+	"fmt"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"log"
+	"net/http"
+	"wscalc/calculations"
 )
-
-type Calculation struct {
-	Equation string `json:"equation"`
-}
 
 var wsUpgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
@@ -32,7 +28,6 @@ func setupRouter() *gin.Engine {
 
 	r.Use(static.Serve("/", static.LocalFile("./public/index.html", true)))
 	r.NoRoute(serveIndex)
-
 	r.GET("/info", info)
 
 	//routes start with get, and get upgraded to ws.
@@ -62,14 +57,36 @@ func subscribe(c *gin.Context) {
 
 	defer ws.Close()
 
-	//for testing.
-	var calc Calculation = Calculation{
-		Equation: "1+2+3=6",
+	type response struct {
+		NumCalculations int                        `json:"numCalculations"`
+		Calculations    []calculations.Calculation `json:"calculations"`
 	}
 
-	err = ws.WriteJSON(&calc)
-	if err != nil {
-		log.Printf("Error writing client bound json: %s\n", err.Error())
+	var lastLength int = 0
+	cs := calculations.GetInstance()
+
+	//wait for updates, then send new data to user.
+	for {
+		if lastLength != cs.Length() {
+
+			fmt.Println("Updating the user!")
+			lastLength = cs.Length()
+
+			// update the client.
+			calculations := cs.Peek10()
+
+			r := response{
+				NumCalculations: len(calculations),
+				Calculations:    calculations,
+			}
+
+			err = ws.WriteJSON(r)
+			if err != nil {
+				log.Printf("Error writing client bound json: %s\n", err.Error())
+				break
+			}
+		}
+
 	}
 }
 
@@ -84,11 +101,23 @@ func publish(c *gin.Context) {
 
 	defer ws.Close()
 
-	var calc Calculation
-	err = ws.ReadJSON(&calc)
-	if err != nil {
-		log.Printf("Error reading server bound json: %s\n", err.Error())
-		return
+	type request struct {
+		Equation string `json:"equation"`
+	}
+
+	cs := calculations.GetInstance()
+	//loop listen / write.
+	for {
+		var r request
+		err = ws.ReadJSON(&r)
+		if err != nil {
+			log.Printf("Error reading server bound json: %s\n", err.Error())
+			continue
+		} else {
+			//fmt.Printf("Got input from user! %#v\n", r)
+			calc := calculations.NewCalculation(r.Equation)
+			cs.Push(*calc)
+		}
 	}
 
 }

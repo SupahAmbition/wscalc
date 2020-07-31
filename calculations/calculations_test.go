@@ -5,7 +5,7 @@ import (
 )
 
 //also tests peek
-func testPush(t *testing.T) {
+func TestPush(t *testing.T) {
 
 	calc := NewCalculation("1+2+3=6")
 
@@ -18,7 +18,7 @@ func testPush(t *testing.T) {
 	}
 }
 
-func testPeek10(t *testing.T) {
+func TestPeek10(t *testing.T) {
 
 	c := GetInstance()
 	for i := 0; i < 10; i++ {
@@ -29,5 +29,9 @@ func testPeek10(t *testing.T) {
 	calculations := c.Peek10()
 	if len(calculations) != 10 {
 		t.Fatal("Did not get 10 caulcations when testing Peek10()")
+	}
+
+	if calculations[9].equation == "" {
+		t.Fatal("Failed to make a copy of the calculations for peek10")
 	}
 }

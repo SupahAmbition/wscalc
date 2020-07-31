@@ -25,16 +25,18 @@ type Calculations struct {
 	lock         sync.RWMutex
 }
 
+// time is not neccessary, but could be useful in the future.
 type Calculation struct {
-	equation  string
-	timestamp time.Time // not neccessary, but could be useful in the future.
-	user      string
+	Equation  string    `json:"equation"`
+	Timestamp time.Time `json:"time"`
+	User      string    `json:"user"`
 }
 
 func NewCalculation(equation string) *Calculation {
 	return &Calculation{
-		equation: equation,
-		user:     "", // for now we dont have usernames.
+		Equation:  equation,
+		User:      "", // for now we dont have usernames.
+		Timestamp: time.Now(),
 	}
 }
 
@@ -59,16 +61,28 @@ func (s *Calculations) Push(c Calculation) {
 	s.lock.Unlock()
 }
 
+//get the length. can be used to check for changes.
+func (s *Calculations) Length() int {
+	s.lock.RLock()
+	result := len(s.calculations)
+	s.lock.RUnlock()
+	return result
+}
+
 //look at the last Calculation made.
 //make a copy so the underlying array isnt changed.
 func (s *Calculations) Peek() Calculation {
 
+	if len(s.calculations) < 1 {
+		return Calculation{}
+	}
+
 	s.lock.RLock()
 	var last Calculation = s.calculations[len(s.calculations)-1]
 	var result Calculation = Calculation{
-		equation:  last.equation,
-		timestamp: last.timestamp,
-		user:      last.user,
+		Equation:  last.Equation,
+		Timestamp: last.Timestamp,
+		User:      last.User,
 	}
 
 	s.lock.RUnlock()
@@ -76,11 +90,19 @@ func (s *Calculations) Peek() Calculation {
 }
 
 //gets the last 10 calculations as a copy.
-func (s *Calculations) Peek10() [10]Calculation {
+func (s *Calculations) Peek10() []Calculation {
 
 	s.lock.RLock()
-	var result [10]Calculation = [10]Calculation{}
-	copy(result[:], s.calculations[len(s.calculations)-11:])
+
+	var result []Calculation
+
+	if len(s.calculations) < 11 {
+		result = make([]Calculation, len(s.calculations), 10)
+		copy(result, s.calculations)
+	} else {
+		result = make([]Calculation, 10)
+		copy(result, s.calculations[len(s.calculations)-11:])
+	}
 
 	s.lock.RUnlock()
 	return result

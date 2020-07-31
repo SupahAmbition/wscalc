@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/websocket"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"github.com/gorilla/websocket"
 )
 
 func TestInfo(t *testing.T) {

@@ -26,8 +26,9 @@ func setupRouter() *gin.Engine {
 
 	r := gin.Default() //router
 
-	r.Use(static.Serve("/", static.LocalFile("./public/index.html", true)))
-	r.NoRoute(serveIndex)
+	r.Use(static.Serve("/", static.LocalFile("./public", true)))
+	//r.Static("/public", "./public")
+	//r.NoRoute(serveIndex)
 	r.GET("/info", info)
 
 	//routes start with get, and get upgraded to ws.
@@ -42,7 +43,7 @@ func info(c *gin.Context) {
 }
 
 func serveIndex(c *gin.Context) {
-	c.File("./public.index.html")
+	c.File("./public/index.html")
 }
 
 //subscribe to calculations made by other users.
@@ -103,6 +104,7 @@ func publish(c *gin.Context) {
 
 	type request struct {
 		Equation string `json:"equation"`
+		User     string `json:"user"`
 	}
 
 	cs := calculations.GetInstance()
@@ -112,7 +114,7 @@ func publish(c *gin.Context) {
 		err = ws.ReadJSON(&r)
 		if err != nil {
 			log.Printf("Error reading server bound json: %s\n", err.Error())
-			continue
+			break
 		} else {
 			//fmt.Printf("Got input from user! %#v\n", r)
 			calc := calculations.NewCalculation(r.Equation)

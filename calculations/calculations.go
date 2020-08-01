@@ -100,7 +100,7 @@ func (s *Calculations) Peek10() []Calculation {
 		result = make([]Calculation, len(s.calculations), 10)
 		copy(result, s.calculations)
 	} else {
-		result = make([]Calculation, 10)
+		result = make([]Calculation, 11)
 		copy(result, s.calculations[len(s.calculations)-11:])
 	}
 

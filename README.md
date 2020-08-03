@@ -8,7 +8,7 @@ When a user uses this calculator, their calcualtion will be broadcasted to all o
 
 ### Build
 
-go build
+go build  
 ./wscalc  
 
 

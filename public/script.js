@@ -87,6 +87,9 @@ for(var i =0;i<operator.length;i++){
         else if( this.id=='-' && getOutput() == '' ){
             printOutput('-')
         }
+        else if( this.id=='-' && getOutput() == '-') {
+            return 
+        }
 		else{
 			var output=getOutput();
 			var history=getHistory();
@@ -120,9 +123,11 @@ for(var i =0;i<number.length;i++){
 
         var output=getOutput();
 		
-        if( Number(output) !=NaN){
+        if( !isNaN(output + this.id)){
+            console.log( output + this.id )
             output = output+this.id;
             printOutput(output)
-        }
+
+        } 
 	});
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+	"time"
 	"wscalc/calculations"
 )
 
@@ -60,15 +61,18 @@ func subscribe(c *gin.Context) {
 		Calculations    []calculations.Calculation `json:"calculations"`
 	}
 
-	var lastLength int = 0
+	var lastTime time.Time = time.Now()
 	cs := calculations.GetInstance()
 
 	//wait for updates, then send new data to user.
 	for {
-		if lastLength != cs.Length() {
+
+		//if out last time doesnt match the updated stack.
+		//then update the user.
+		if !(lastTime.Equal(cs.Peek().Timestamp)) {
 
 			//fmt.Println("Updating the user!")
-			lastLength = cs.Length()
+			lastTime = cs.Peek().Timestamp
 
 			// update the client.
 			calculations := cs.Peek10()

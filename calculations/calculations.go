@@ -56,9 +56,18 @@ func newCalculations() *Calculations {
 }
 
 //add a calculation to the stack.
+//when the stack grows past 10 elements, discard the oldest elements
 func (s *Calculations) Push(c Calculation) {
 	s.lock.Lock()
-	s.calculations = append(s.calculations, c)
+
+	var last10 []Calculation
+	if len(s.calculations)+1 > 10 {
+		//take the last 9 + the new element.
+		last10 = s.calculations[1:]
+	} else {
+		last10 = s.calculations
+	}
+	s.calculations = append(last10, c)
 	s.lock.Unlock()
 }
 
@@ -98,12 +107,12 @@ func (s *Calculations) Peek10() []Calculation {
 
 	var result []Calculation
 
-	if len(s.calculations) < 11 {
+	if len(s.calculations) < 10 {
 		result = make([]Calculation, len(s.calculations), 10)
 		copy(result, s.calculations)
 	} else {
-		result = make([]Calculation, 11)
-		copy(result, s.calculations[len(s.calculations)-11:])
+		result = make([]Calculation, 10)
+		copy(result, s.calculations[len(s.calculations)-10:])
 	}
 
 	s.lock.RUnlock()

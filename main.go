@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -10,6 +9,7 @@ import (
 	"wscalc/calculations"
 )
 
+//used for upgrading a get request to ws
 var wsUpgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true
@@ -17,7 +17,6 @@ var wsUpgrader = websocket.Upgrader{
 }
 
 func main() {
-
 	r := setupRouter()
 	r.Run(":8000")
 }
@@ -27,8 +26,6 @@ func setupRouter() *gin.Engine {
 	r := gin.Default() //router
 
 	r.Use(static.Serve("/", static.LocalFile("./public", true)))
-	//r.Static("/public", "./public")
-	//r.NoRoute(serveIndex)
 	r.GET("/info", info)
 
 	//routes start with get, and get upgraded to ws.
@@ -70,7 +67,7 @@ func subscribe(c *gin.Context) {
 	for {
 		if lastLength != cs.Length() {
 
-			fmt.Println("Updating the user!")
+			//fmt.Println("Updating the user!")
 			lastLength = cs.Length()
 
 			// update the client.

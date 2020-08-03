@@ -1,14 +1,14 @@
 // A state manager for keeping track of all the
 //calculations made by users.
 //
-// There are a few patterns being used for this datastructure.
-// 1. The data strucutre  resembles a stack, but is just an array
-//		where add to the end of the array.
+// There are a few patterns being used for this data-structure.
+// 1. The data strucutre  resembles a stack, but is just an array internally
+//		where add to the end of the array. And we dont do any popping.
 //		This allows for an easy way to get the last ten calculations.
 // 2. The data structure utilizes the Singleton pattern so that there is
 //		only one version of the stack.
 // 3. The data structure is thread safe. A mutex is aquired on writing,
-//		and copies are made for reads.
+//		and copies are made for reads (instead of passing a pointer to the data).
 //		A soft lock is used for reading, to allow for simultaneous reading.
 
 package calculations
@@ -55,6 +55,7 @@ func newCalculations() *Calculations {
 	}
 }
 
+//add a calculation to the stack.
 func (s *Calculations) Push(c Calculation) {
 	s.lock.Lock()
 	s.calculations = append(s.calculations, c)
@@ -90,6 +91,7 @@ func (s *Calculations) Peek() Calculation {
 }
 
 //gets the last 10 calculations as a copy.
+//returns an array of length <= 10
 func (s *Calculations) Peek10() []Calculation {
 
 	s.lock.RLock()

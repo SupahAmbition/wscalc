@@ -32,7 +32,7 @@ init  -- 0:00 [49360055c](https://github.com/SupahAmbition/wscalc/commit/4936005
 
 5:21 -- [8e61eadb307](https://github.com/SupahAmbition/wscalc/commit/8e61eadb3070bb31450955f488f905e389851827)
 
-5:53 -- [7580a40a](https://github.com/SupahAmbition/wscalc/commit/7580a40aac567699f7b8a0ebcf0d6de89929d2662)
+5:53 -- [580a40aac5](https://github.com/SupahAmbition/wscalc/commit/580a40aac567699f7b8a0ebcf0d6de89929d2662)
 
 finished 
 

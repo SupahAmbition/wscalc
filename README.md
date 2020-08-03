@@ -32,9 +32,21 @@ init  -- 0:00 [49360055c](https://github.com/SupahAmbition/wscalc/commit/4936005
 
 5:21 -- [8e61eadb307](https://github.com/SupahAmbition/wscalc/commit/8e61eadb3070bb31450955f488f905e389851827)
 
-5:35 -- [7b698fbe1ee1](https://github.com/SupahAmbition/wscalc/commit/7b698fbe1ee1c27d17414bfd2f17be938465ca41)
+5:53 -- [7580a40a](https://github.com/SupahAmbition/wscalc/commit/7580a40aac567699f7b8a0ebcf0d6de89929d2662)
 
 finished 
 
 
 
+#### Final Notes 
+
+In the end I went over the 5 hour mark a bit, but I believe 
+the quality of the resulting code was woth it. 
+I combed through many (if not all) number formating / calculator bugs, and 
+I created a super efficent, thread safe data structure that is sure to help keep AWS costs low. 
+  
+
+I lifted a bit of html/css from [here](https://github.com/abarna-codespot/A-simple-Calculator) in order to save time, 
+and retrofitted it to allow for decimals, and negitive numbers. 
+  
+I dont really consider this a bug but to use decimals you do have to have a leading digit such as (0.1).  
